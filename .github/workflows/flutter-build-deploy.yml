@@ -24,6 +24,7 @@ jobs:
         # path: build/app/outputs/apk/debug.apk
   deploy:
     name: Deploy App Distribution
+    runs-on: ubuntu-latest
     - uses: actions/checkout@v3
     - uses: actions/upload-artifact@v3
       id: download
