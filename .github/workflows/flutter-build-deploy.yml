@@ -16,11 +16,12 @@ jobs:
     #     cache: true
     # - run: flutter pub get
     # - run: flutter build apk --debug --split-per-abi
-    - run: echo Test > build/app/outputs/apk/test.txt
+    - run 
+    - run: echo Test > android/test.txt
     - uses: actions/upload-artifact@v3
       with:
         name: apk
-        path: build/app/outputs/apk/test.txt
+        path: android/test.txt
         # path: build/app/outputs/flutter-apk/app-armeabi-v7a-debug.apk
 
   deploy:
@@ -33,6 +34,6 @@ jobs:
       id: download
       with:
         name: apk
-        path: build/app/outputs/apk/test.txt
+        path: android/test.txt
     - name: CAT
       run: cat ${{steps.download.outputs.download-path}}/test.txt
