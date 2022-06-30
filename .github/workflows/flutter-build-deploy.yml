@@ -16,7 +16,6 @@ jobs:
     #     cache: true
     # - run: flutter pub get
     # - run: flutter build apk --debug --split-per-abi
-    - run 
     - run: echo Test > android/test.txt
     - uses: actions/upload-artifact@v3
       with:
