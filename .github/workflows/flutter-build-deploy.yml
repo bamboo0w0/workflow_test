@@ -22,9 +22,12 @@ jobs:
         name: apk
         path: build/app/outputs/apk/test.txt
         # path: build/app/outputs/apk/debug.apk
+
   deploy:
     name: Deploy App Distribution
+    needs: build
     runs-on: ubuntu-latest
+    steps:
     - uses: actions/checkout@v3
     - uses: actions/upload-artifact@v3
       id: download
