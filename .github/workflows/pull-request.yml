@@ -1,0 +1,12 @@
+on: push
+name: Create PR
+jobs:
+  create:
+    name: Create PR
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v4
+      with:
+        title: 'Test'
