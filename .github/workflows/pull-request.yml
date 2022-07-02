@@ -8,8 +8,6 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
     - uses: actions/checkout@v3
-    - name: Checkout Branch
-      run: git checkout -b version/update
     - name: Update Version
       id: update
       run: |
@@ -21,12 +19,14 @@ jobs:
           echo ✨ new version: $new_version
           sed -i -e "s/\(^version: \)\(.*$\)/\1$new_version/g" pubspec.yaml
           echo "::set-output name=new_version::$new_version"
-    - name: Commit & Push
-      run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit -m "Update version to ${{steps.update.outputs.new_version}}"
-          git push origin version/update
     - name: Create Pull Request
-      run: gh pr create -B main -t "🔖 Update version to ${{steps.update.outputs.new_version}}" -b "テスト"
+      id: create-pr
+      uses: peter-evans/create-pull-request@v4
+      with:
+        branch: version/update
+        title: 🔖 Update version to ${{steps.update.outputs.new_version}}
+        body: "Version Update"
+    - name: Approve & Squash Merge Pull Request
+      run: |
+          gh pr review ${{steps.create-pr.outputs.pull-request-number}} --approve
+          gh pr merge ${{steps.create-pr.outputs.pull-request-number}} --squash
