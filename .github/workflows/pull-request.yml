@@ -1,11 +1,23 @@
-on: push
+on: 
+  workflow_dispatch:
+    inputs:
+      release-note:
+        required: true
+        default: "Write some messsage here"
+      version-up:
+        type: boolean
+        description: version up dev ver?
+        default: true
+      environment:
+        type: environment
 name: Create PR
 jobs:
   create:
     name: Create PR
     runs-on: ubuntu-latest
+    environment: ${{github.event.inputs.environment}}
     env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     steps:
     - uses: actions/checkout@v3
     - name: Update Version
@@ -13,7 +25,9 @@ jobs:
       run: |
           read version dev_version build_number <<< `cat pubspec.yaml | grep ^version | sed -e "s/\(^version: \)\(.*\.\)\([0-9]*\)+\([0-9]*\)/\2 \3 \4/g"`
           echo old version: $version$dev_version+$build_number
-          dev_version=$((dev_version+1))
+          if ${{github.event.inputs.version-up}}; then
+            dev_version=$((dev_version+1))
+          fi
           build_number=$((build_number+1))
           new_version=$version$dev_version+$build_number
           echo ✨ new version: $new_version
@@ -25,8 +39,7 @@ jobs:
       with:
         branch: version/update
         title: 🔖 Update version to ${{steps.update.outputs.new_version}}
-        body: "Version Update"
-    - name: Approve & Squash Merge Pull Request
-      run: |
-          gh pr review ${{steps.create-pr.outputs.pull-request-number}} --approve
-          gh pr merge ${{steps.create-pr.outputs.pull-request-number}} --squash
+        body: ${{github.event.inputs.release-note}}
+        labels: |
+            deploy
+            ${{github.event.inputs.environment}}
