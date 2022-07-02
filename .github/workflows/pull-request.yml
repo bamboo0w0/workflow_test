@@ -37,7 +37,7 @@ jobs:
       id: create-pr
       uses: peter-evans/create-pull-request@v4
       with:
-        branch: version/update
+        branch: version/update-${{github.event.inputs.environment}}
         title: 🔖 Update version to ${{steps.update.outputs.new_version}}
         body: ${{github.event.inputs.release-note}}
         labels: |
