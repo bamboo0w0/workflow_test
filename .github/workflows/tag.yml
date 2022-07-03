@@ -16,10 +16,14 @@ jobs:
     - name: Check Version Diff
       id: check
       run: | # 前回コミットと比較してversionが変わっているか
-          count=`git diff HEAD^ | grep -c ^+version:`
-          echo "::set-output name=result::$count"
+          if git diff HEAD^ | grep "^+version:"; then
+            changed=true
+          else
+            changed=false
+          fi
+          echo "::set-output name=result::$changed"
     - name: Create Tag
-      if: ${{steps.check.outputs.result == 0}}
+      if: ${{steps.check.outputs.result == true}}
       run: | 
           read version <<< `cat pubspec.yaml | grep ^version | sed -e "s/^version: //g"`
           git tag $version
