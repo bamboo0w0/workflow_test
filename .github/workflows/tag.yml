@@ -17,12 +17,8 @@ jobs:
       id: check
       run: | # 前回コミットと比較してversionが変わっているか
           if git diff HEAD^ | grep "^+version:"; then
-            changed=true
-          else
-            changed=false
+            echo "::set-output name=result::true"
           fi
-          echo Chenged Verion : $changed
-          echo "::set-output name=result::$changed"
     - name: Create Tag
       if: ${{steps.check.outputs.result == 'true'}}
       run: | 
