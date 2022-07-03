@@ -24,7 +24,7 @@ jobs:
           echo Chenged Verion : $changed
           echo "::set-output name=result::$changed"
     - name: Create Tag
-      if: ${{steps.check.outputs.result}} == true
+      if: ${{steps.check.outputs.result == true}}
       run: | 
           read version <<< `cat pubspec.yaml | grep ^version | sed -e "s/^version: //g"`
           git tag $version
