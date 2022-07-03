@@ -1,4 +1,5 @@
 # デプロイ前のバージョンアップ用のPRを作成する
+name: Create VersionUp PR
 on: 
   workflow_dispatch:
     inputs:
@@ -11,7 +12,6 @@ on:
         default: true
       environment:
         type: environment
-name: Create PR
 jobs:
   create:
     name: Create PR
