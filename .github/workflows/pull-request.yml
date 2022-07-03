@@ -1,12 +1,13 @@
+# デプロイ前のバージョンアップ用のPRを作成する
 on: 
   workflow_dispatch:
     inputs:
       release-note:
         required: true
-        default: "Write some messsage here"
+        description: 'リリースノートを記入してください'
       version-up:
         type: boolean
-        description: version up dev ver?
+        description: '開発バージョンを上げますか？'
         default: true
       environment:
         type: environment
@@ -38,8 +39,6 @@ jobs:
       uses: peter-evans/create-pull-request@v4
       with:
         branch: version/update-${{github.event.inputs.environment}}
-        title: 🔖 Update version to ${{steps.update.outputs.new_version}}
+        title: '🔖 :Update version to ${{steps.update.outputs.new_version}} for Deployment ${{github.event.inputs.environment}}'
         body: ${{github.event.inputs.release-note}}
-        labels: |
-            deploy
-            ${{github.event.inputs.environment}}
+        labels: ${{github.event.inputs.environment}}
