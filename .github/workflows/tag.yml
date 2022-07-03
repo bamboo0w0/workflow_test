@@ -11,10 +11,12 @@ jobs:
       GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 2
     - name: Check Version Diff
       id: check
       run: | # 前回コミットと比較してversionが変わっているか
-          git diff HEAD^ HEAD | grep ^+version:
+          git diff HEAD^ | grep ^+version:
           echo "::set-output name=result::$?"
     - name: Create Tag
       if: ${{steps.check.outputs.result == 0}}
