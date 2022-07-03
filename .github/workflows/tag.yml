@@ -14,7 +14,7 @@ jobs:
     - name: Check Version Diff
       id: check
       run: | # 前回コミットと比較してversionが変わっているか
-          git diff | grep ^+version:
+          git diff HEAD~ HEAD | grep ^+version:
           echo "::set-output name=result::$?"
     - name: Create Tag
       if: ${{steps.check.outputs.result == 0}}
