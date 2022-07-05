@@ -4,7 +4,7 @@ on:
     inputs:
       release-note:
         required: true
-        description: 'リリースノートを記入してください(%0Aで改行可能)'
+        description: 'リリースノートを記入してください'
       environment:
         type: environment
 jobs:
