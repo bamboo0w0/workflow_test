@@ -4,10 +4,20 @@ on:
     inputs:
       release-note:
         required: true
-        description: 'リリースノートを記入してください'
+        description: 'リリースノートを記入してください(%0Aで改行可能)'
       environment:
         type: environment
 jobs:
+  confirm:
+    name: Confirm Input
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Show Input
+      run: |
+          read version <<< `cat pubspec.yaml | grep ^version | sed -e "s/^version: //g"`
+          echo Version: $version
+          echo ReleaseNote: ${{github.event.inputs.release-note}}
   build:
     name: Build APK
     runs-on: ubuntu-latest
