@@ -3,20 +3,14 @@ name: Create VersionUp PR
 on: 
   workflow_dispatch:
     inputs:
-      release-note:
-        required: true
-        description: 'リリースノートを記入してください'
       version-up:
         type: boolean
         description: '開発バージョンを上げますか？'
         default: true
-      environment:
-        type: environment
 jobs:
   create:
     name: Create PR
     runs-on: ubuntu-latest
-    environment: ${{github.event.inputs.environment}}
     env:
       GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     steps:
@@ -38,7 +32,7 @@ jobs:
       id: create-pr
       uses: peter-evans/create-pull-request@v4
       with:
-        branch: version/update-${{github.event.inputs.environment}}
-        title: '🔖 :Update version to ${{steps.update.outputs.new_version}} for Deployment ${{github.event.inputs.environment}}'
-        body: ${{github.event.inputs.release-note}}
-        labels: ${{github.event.inputs.environment}}
+        branch: version/update
+        title: '🔖 :Update version to ${{steps.update.outputs.new_version}}'
+        body: 自動作成されたPRです
+

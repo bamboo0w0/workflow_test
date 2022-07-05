@@ -1,8 +1,8 @@
 name: Create Tag
 on:
-  push:
-    paths:
-      - 'pubspec.yaml'
+  # push:
+  #   paths:
+  #     - 'pubspec.yaml'
 jobs:
   create:
     name: Create Tag

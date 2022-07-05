@@ -1,12 +1,24 @@
-on: 
-  workflow_dispatch:
 name: Build and Release apk
+on:
+  workflow_dispatch:
+    inputs:
+      release-note:
+        required: true
+        description: 'リリースノートを記入してください'
+      environment:
+        type: environment
 jobs:
   build:
     name: Build APK
     runs-on: ubuntu-latest
+    environment: ${{github.event.inputs.environment}}
     steps:
     - uses: actions/checkout@v3
+    - name: Create Tag
+      run: | 
+          read version <<< `cat pubspec.yaml | grep ^version | sed -e "s/^version: //g"`
+          git tag $version
+          git push origin $version
     - uses: actions/setup-java@v1
       with:
         distribution: 'zulu'
@@ -26,6 +38,7 @@ jobs:
     name: Deploy App Distribution
     needs: build
     runs-on: ubuntu-latest
+    environment: ${{github.event.inputs.environment}}
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -40,3 +53,4 @@ jobs:
         token: ${{secrets.FIREBASE_TOKEN}}
         groups: tester
         file: ${{steps.download.outputs.download-path}}/app-armeabi-v7a-debug.apk
+        releaseNotes: ${{github.event.inputs.release-note}}
