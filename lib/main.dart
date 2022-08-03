@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workflow_test/widget/submit_button.dart';
 
 void main() {
   runApp(const MyApp());
@@ -95,6 +96,10 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const SubmitButton(
+              color: Colors.red,
+              size: 200,
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),
